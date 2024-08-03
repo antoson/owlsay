@@ -1,15 +1,25 @@
 default: test-all
 alias b := build
 
-fortune := `fortune -s`
+# fortune := `fortune -s`
+fortune := `cat wisdom`
 
 build:
     go build -o owlsay owlsay.go
-@test-args:
+@fortune:
+    echo fortune:
+    echo '{{fortune}}'
+    od -c wisdom
+@test-args: build
     echo args:
     ./owlsay '{{fortune}}'
-@test-stdin:
+@test-stdin: build
     echo stdin:
     echo '{{fortune}}' | ./owlsay
-test-all: build && test-args test-stdin
+@test-ab: build fortune
+    echo cowsay:
+    echo '{{fortune}}' | cowsay
+    echo owlsay:
+    echo '{{fortune}}' | ./owlsay
+test-all: build && fortune test-args test-stdin
 

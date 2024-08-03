@@ -30,14 +30,25 @@ func main() {
 	fmt.Println(owl)
 }
 
-func wrap(input string) [][]string {
-	// stripped := strings.ReplaceAll(line, "\n", " ")
-	lines := strings.Split(input, "\n")
-	lines_of_words := make([][]string, len(lines))
-	for i, line := range lines {
-		lines_of_words[i] = strings.Split(line, " ") 
+func wrap(input string) string {
+	input = strings.ReplaceAll(input, "\n", " ")
+	input = strings.ReplaceAll(input, "\t\t", "\n\n")
+	words := strings.Split(input, " ")
+	var builder strings.Builder
+	var charcount = 0
+	for _, word := range words {
+		// fmt.Printf("%v: %v\n", i, word)
+		length, _ := builder.WriteString(word)
+		charcount += length
+		if charcount >= 30 {
+			// fmt.Println("charcount >= 40")
+			builder.WriteString("\n")
+			charcount = 0
+		} else {
+			builder.WriteString(" ")
+		}
 	}
-	return lines_of_words
+	return builder.String()
 }
 
 func print_stdin() string {
